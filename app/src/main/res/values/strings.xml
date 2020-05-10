@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Dogs Gallery</string>
+    <string name="recycler_view_item">List item</string>
+</resources>
