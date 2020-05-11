@@ -1,17 +1,16 @@
-package com.litrud.dogsgallery
+package com.litrud.dogsgallery.fragments
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.litrud.dogsgallery.R
 
-
-class CardsAdapter(var listener : ClickListener) : RecyclerView.Adapter<CardsAdapter.CardViewHolder>() {
-    private var itemList = mutableListOf<Drawable>()
+// TODO доработать
+class PhotosCardsAdapter(var listener : ClickListener) : RecyclerView.Adapter<PhotosCardsAdapter.CardViewHolder>() {
+    private var photoList = mutableListOf<Drawable>()
 
     inner class CardViewHolder(itemView: CardView) : RecyclerView.ViewHolder(itemView) {
         val cardView = itemView
@@ -20,24 +19,24 @@ class CardsAdapter(var listener : ClickListener) : RecyclerView.Adapter<CardsAda
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val cardView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.card, parent, false)
+            .inflate(R.layout.card_photo, parent, false)
         return CardViewHolder(cardView as CardView)
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.imageView.setImageDrawable(itemList[position])
+        holder.imageView.setImageDrawable(photoList[position])
         holder.imageView.contentDescription = "image"
         holder.cardView.setOnClickListener {
-            listener.onClick(itemList[position])
+            listener.onClick(photoList[position])
         }
     }
 
     fun update(items : List<Drawable>) {
-        itemList = items.toMutableList()
+        photoList = items.toMutableList()
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = itemList.size
+    override fun getItemCount(): Int = photoList.size
 
     interface ClickListener {
         fun onClick(item : Drawable)
