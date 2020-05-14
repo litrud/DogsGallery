@@ -1,6 +1,5 @@
 package com.litrud.dogsgallery.network
 
-import androidx.lifecycle.LiveData
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,16 +21,16 @@ import retrofit2.http.Path
 interface DogsApiWebservice {
 
     @GET("breeds/list/all")
-    fun getListAllBreeds() : Call<DogsApiObject>
+    fun getListAllBreeds() : Call<ApiObjectMapString>
 
     @GET("breed/{breed}/images")
-    fun getPhotosByBreed(@Path("breed") breed: String) : Call<DogsApiObject>
+    fun getPhotosURLsByBreed(@Path("breed") breed: String) : Call<ApiObjectListString>
 
     @GET("breed/{breed}/images/random")
-    fun getRandomPhotoByBreed(@Path("breed") breed: String) : Call<DogsApiObject>
+    fun getRandomPhotoByBreed(@Path("breed") breed: String) : Call<ApiObjectStringString>
 
     @GET("breeds/image/random")
-    fun getRandomPhoto() : Call<DogsApiObject>
+    fun getRandomPhoto() : Call<ApiObjectStringString>
 
     companion object Factory {
         fun create() : DogsApiWebservice {

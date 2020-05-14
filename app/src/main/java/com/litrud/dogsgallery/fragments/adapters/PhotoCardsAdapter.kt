@@ -1,16 +1,20 @@
-package com.litrud.dogsgallery.fragments
+package com.litrud.dogsgallery.fragments.adapters
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.litrud.dogsgallery.R
 
-// TODO доработать
-class PhotosCardsAdapter(var listener : ClickListener) : RecyclerView.Adapter<PhotosCardsAdapter.CardViewHolder>() {
-    private var photoList = mutableListOf<Drawable>()
+
+class PhotoCardsAdapter(private var fragment: Fragment,
+                        private var clickListener : ClickListener)
+    : RecyclerView.Adapter<PhotoCardsAdapter.CardViewHolder>() {
+
+    private var urlList = mutableListOf<String>()
 
     inner class CardViewHolder(itemView: CardView) : RecyclerView.ViewHolder(itemView) {
         val cardView = itemView
@@ -24,21 +28,24 @@ class PhotosCardsAdapter(var listener : ClickListener) : RecyclerView.Adapter<Ph
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.imageView.setImageDrawable(photoList[position])
-        holder.imageView.contentDescription = "image"
+        val url = urlList.get(position)
+        Glide.with(fragment)
+            .load(url)
+            .into(holder.imageView)
+
         holder.cardView.setOnClickListener {
-            listener.onClick(photoList[position])
+            clickListener.onClick(position)
         }
     }
 
-    fun update(items : List<Drawable>) {
-        photoList = items.toMutableList()
+    fun update(linksList: MutableList<String>) {
+        urlList = linksList
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = photoList.size
+    override fun getItemCount(): Int = urlList.size
 
-    interface ClickListener {
-        fun onClick(item : Drawable)
+    interface ClickListener{
+        fun onClick(position : Int)
     }
 }
