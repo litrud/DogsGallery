@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/breedListFragment"
+    >
+
+    <fragment
+        android:id="@+id/breedListFragment"
+        android:name="com.litrud.dogsgallery.listbreed.BreedListFragment"
+        android:label="BreedList"
+        tools:layout="@layout/fragment_breed_list" >
+        <action
+            android:id="@+id/action_breedListFragment_to_photoListFragment"
+            app:destination="@id/photoListFragment">
+            <argument
+                android:name="breedHyphenated"
+                app:argType="string" />
+            <argument
+                android:name="breedKeyword"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/photoListFragment"
+        android:name="com.litrud.dogsgallery.listphoto.PhotoListFragment"
+        android:label="PhotoList"
+        tools:layout="@layout/fragment_photo_list" >
+        <action
+            android:id="@+id/action_photoListFragment_to_photoFragment"
+            app:destination="@id/photoFragment">
+            <argument
+                android:name="url"
+                app:argType="string" />
+        </action>
+        <argument
+            android:name="breedHyphenated"
+            app:argType="string" />
+        <argument
+            android:name="breedKeyword"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoFragment"
+        android:name="com.litrud.dogsgallery.photo.PhotoFragment"
+        android:label="Photo"
+        tools:layout="@layout/fragment_photo">
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
+</navigation>

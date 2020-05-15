@@ -1,18 +1,18 @@
-package com.litrud.dogsgallery.fragments.adapters
+package com.litrud.dogsgallery.listphoto
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.litrud.dogsgallery.R
 
 
-class PhotoCardsAdapter(private var fragment: Fragment,
-                        private var clickListener : ClickListener)
-    : RecyclerView.Adapter<PhotoCardsAdapter.CardViewHolder>() {
+class PhotoListAdapter(private var fragment: Fragment)
+    : RecyclerView.Adapter<PhotoListAdapter.CardViewHolder>() {
 
     private var urlList = mutableListOf<String>()
 
@@ -28,24 +28,29 @@ class PhotoCardsAdapter(private var fragment: Fragment,
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        val url = urlList.get(position)
+        val url = urlList[position]
+
         Glide.with(fragment)
             .load(url)
             .into(holder.imageView)
 
         holder.cardView.setOnClickListener {
-            clickListener.onClick(position)
+            // pass argument within the action
+            val action = PhotoListFragmentDirections.actionPhotoListFragmentToPhotoFragment(url)
+            it.findNavController().navigate(action)
         }
     }
 
-    fun update(linksList: MutableList<String>) {
-        urlList = linksList
+    fun update(links: MutableList<String>, breedHyphenated: String) {
+        // first select from links only those links that contain breedHyphenated
+        val urls = mutableListOf<String>()
+        links.forEach {
+            if (it.contains(breedHyphenated))
+                urls.add(it)
+        }
+        urlList = urls
         notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = urlList.size
-
-    interface ClickListener{
-        fun onClick(position : Int)
-    }
 }

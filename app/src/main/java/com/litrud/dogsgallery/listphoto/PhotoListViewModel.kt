@@ -1,15 +1,15 @@
-package com.litrud.dogsgallery.vm
+package com.litrud.dogsgallery.listphoto
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.litrud.dogsgallery.network.DogsApiRepository
-import com.litrud.dogsgallery.network.ApiObjectListString
+import com.litrud.dogsgallery.network.apiobject.ApiObjectListString
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PhotosListViewModel : ViewModel() {
+class PhotoListViewModel : ViewModel() {
     val urlList: MutableLiveData<MutableList<String>> = MutableLiveData()
 
     fun getPhotosURLsByBreed(breed: String) {

@@ -1,14 +1,14 @@
-package com.litrud.dogsgallery.fragments.adapters
+package com.litrud.dogsgallery.listbreed
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
 
-class BreedCardsAdapter(private var clickListener : ClickListener)
-    : RecyclerView.Adapter<BreedCardsAdapter.CardViewHolder>() {
+class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>() {
 
     private var breedList = mutableListOf<String>()
     private var breedListHyphenated = mutableListOf<String>()
@@ -28,7 +28,12 @@ class BreedCardsAdapter(private var clickListener : ClickListener)
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         holder.textView.text = breedList[position]
         holder.cardView.setOnClickListener {
-            clickListener.onClick(breedListHyphenated[position], breedListKeyword[position])
+            // pass arguments within the action
+            val action = BreedListFragmentDirections.actionBreedListFragmentToPhotoListFragment(
+                breedListHyphenated[position],
+                breedListKeyword[position]
+            )
+            it.findNavController().navigate(action)
         }
     }
 
@@ -57,8 +62,4 @@ class BreedCardsAdapter(private var clickListener : ClickListener)
     }
 
     override fun getItemCount(): Int = breedList.size
-
-    interface ClickListener {
-        fun onClick(breed_hyphenated: String, breed_keyword: String)
-    }
 }

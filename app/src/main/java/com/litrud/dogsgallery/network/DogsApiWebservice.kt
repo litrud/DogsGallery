@@ -1,5 +1,8 @@
 package com.litrud.dogsgallery.network
 
+import com.litrud.dogsgallery.network.apiobject.ApiObjectListString
+import com.litrud.dogsgallery.network.apiobject.ApiObjectMapString
+import com.litrud.dogsgallery.network.apiobject.ApiObjectStringString
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -8,7 +11,7 @@ import retrofit2.http.Path
 
 /*  api docs
 
-    List All Breeds
+    List All Breed
         https://dog.ceo/dog-api/documentation/
     Photos By Breed
         https://dog.ceo/dog-api/documentation/breed
@@ -21,7 +24,7 @@ import retrofit2.http.Path
 interface DogsApiWebservice {
 
     @GET("breeds/list/all")
-    fun getListAllBreeds() : Call<ApiObjectMapString>
+    fun getListAllBreed() : Call<ApiObjectMapString>
 
     @GET("breed/{breed}/images")
     fun getPhotosURLsByBreed(@Path("breed") breed: String) : Call<ApiObjectListString>
