@@ -9,16 +9,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.litrud.dogsgallery.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PhotoListFragment : Fragment() {
+    private val viewModel: PhotoListViewModel by viewModel()
     private lateinit var args: PhotoListFragmentArgs
     private lateinit var textEmpty: TextView
     private lateinit var progressBar: ProgressBar
@@ -68,20 +69,15 @@ class PhotoListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        ViewModelProvider(this).get(PhotoListViewModel::class.java).apply {
-            // request photo URLs
-            getPhotosURLsByBreed(args.breedKeyword)
-            // observe photo URLs
-            urlList.observe(viewLifecycleOwner, Observer { urls: MutableList<String> ->
-                if (urls.isEmpty())
-                    textEmpty.visibility = View.VISIBLE
-                else {
-                    textEmpty.visibility = View.GONE
-                    mAdapter.update(urls, args.breedHyphenated)
-                }
-                progressBar.visibility = View.GONE
-            })
-        }
+        viewModel.getPhotosURLsByBreed(args.breedKeyword)
+        viewModel.urlList.observe(viewLifecycleOwner, Observer { urls: MutableList<String> ->
+            if (urls.isEmpty())
+                textEmpty.visibility = View.VISIBLE
+            else {
+                textEmpty.visibility = View.GONE
+                mAdapter.update(urls, args.breedHyphenated)
+            }
+            progressBar.visibility = View.GONE
+        })
     }
 }
