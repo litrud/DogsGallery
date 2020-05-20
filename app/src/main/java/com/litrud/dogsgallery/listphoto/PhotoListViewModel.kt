@@ -29,27 +29,7 @@ class PhotoListViewModel : ViewModel() {
         })
     }
 
-//    fun getPhotosURLsByBreed(breed: String) {
-//        DogsApiRepository.getPhotosByBreed(breed).enqueue(object : Callback<DogsApiObject> {
-//            override fun onFailure(call: Call<DogsApiObject>, t: Throwable) {
-//                Log.e("LITRUD", "onFailure in getPhotosByBreed()")
-//                t.printStackTrace()
-//            }
-//            override fun onResponse(call: Call<DogsApiObject>, response: Response<DogsApiObject>) {
-//                // get response
-//                val apiObject = response.body()
-//                // get map of URLs of photos
-//                val map = apiObject!!.message
-//                // get the list of URLs of photos
-//                val list = map.getValue(KEY)
-//
-//                urlList.value = list
-//            }
-//        })
-//    }
-
     companion object ApiObjectContract {
-        const val KEY = "message"
         const val TAG = "LITRUD"
     }
 }

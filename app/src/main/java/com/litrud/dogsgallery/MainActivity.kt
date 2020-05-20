@@ -3,11 +3,9 @@ package com.litrud.dogsgallery
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-/* todo
-    customize the look of RecycledView and individual photo
-    ( see glide docs https://github.com/bumptech/glide/wiki )
-
-    use loading indicator and empty-message
+/* todo wonders whether !
+    after "terrier fox" breeds are not loaded into the list.
+    !!! see PhotoListViewModel on line 27. list size = 1000 on request "terrier" breed
  */
 
 /**

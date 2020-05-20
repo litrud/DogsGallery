@@ -2,8 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-// to generate Kotlin code suitable for Kotlin-only modules
+// Navigation. Safe Args.
+// To generate Kotlin code suitable for Kotlin-only modules
 apply plugin: "androidx.navigation.safeargs.kotlin"
+
+//apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -56,7 +59,14 @@ dependencies {
     /*  Glide
         http://bumptech.github.io/glide/
      */
-    implementation("com.github.bumptech.glide:glide:4.11.0") {
+    def glide_version = "4.11.0"
+    implementation("com.github.bumptech.glide:glide:$glide_version") {
         exclude group: "com.android.support"
     }
+    implementation("com.github.bumptech.glide:recyclerview-integration:$glide_version") {
+        // Excludes the support library because it's already included by Glide.
+        transitive = false
+    }
+
+//    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 }

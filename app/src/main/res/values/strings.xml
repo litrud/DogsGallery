@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Dogs Gallery</string>
+
+    <!--  descriptions  -->
     <string name="recycler_view_item">List item</string>
     <string name="photo_of_dog">Photo of dog</string>
+
+    <!--  messages  -->
+    <string name="msg_empty">Empty</string>
 
 </resources>
