@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/breedListFragment"
-    >
+    app:startDestination="@id/breedListFragment">
 
     <fragment
         android:id="@+id/breedListFragment"
@@ -23,32 +22,35 @@
                 app:argType="string" />
         </action>
     </fragment>
+
     <fragment
         android:id="@+id/photoListFragment"
         android:name="com.litrud.dogsgallery.listphoto.PhotoListFragment"
         android:label="PhotoList"
         tools:layout="@layout/fragment_photo_list" >
-        <action
-            android:id="@+id/action_photoListFragment_to_photoFragment"
-            app:destination="@id/photoFragment">
-            <argument
-                android:name="url"
-                app:argType="string" />
-        </action>
         <argument
             android:name="breedHyphenated"
             app:argType="string" />
         <argument
             android:name="breedKeyword"
             app:argType="string" />
+        <action
+            android:id="@+id/action_photoListFragment_to_photoFragment"
+            app:destination="@id/photoFragment">
+            <argument
+                android:name="position"
+                app:argType="integer" />
+        </action>
     </fragment>
+
     <fragment
         android:id="@+id/photoFragment"
-        android:name="com.litrud.dogsgallery.photo.PhotoFragment"
+        android:name="com.litrud.dogsgallery.listphoto.PhotoFragment"
         android:label="Photo"
-        tools:layout="@layout/fragment_photo">
+        tools:layout="@layout/page_photo" >
         <argument
-            android:name="url"
-            app:argType="string" />
+            android:name="position"
+            app:argType="integer" />
     </fragment>
+
 </navigation>

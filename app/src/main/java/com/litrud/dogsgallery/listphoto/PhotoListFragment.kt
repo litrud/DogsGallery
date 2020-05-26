@@ -23,15 +23,13 @@ class PhotoListFragment : Fragment() {
     private lateinit var textEmpty: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var mAdapter: PhotoListAdapter
+    private lateinit var viewModel: PhotosViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         args = PhotoListFragmentArgs.fromBundle(requireArguments())
-
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_photo_list, container, false)
 
         // number of columns in list
         val spanCount = 4
@@ -40,45 +38,45 @@ class PhotoListFragment : Fragment() {
         val metrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(metrics)
         val width = metrics.widthPixels
-        val imageWidthPixels = width / spanCount
-        val imageHeightPixels = imageWidthPixels
+        val squareSize = width / spanCount
 
         // list adapter
-        mAdapter = PhotoListAdapter(this, imageWidthPixels, imageHeightPixels)
+        mAdapter = PhotoListAdapter(this, squareSize, squareSize)
 
         // list preloader
-        val sizeProvider = FixedPreloadSizeProvider<String>(imageWidthPixels, imageHeightPixels)
+        val sizeProvider = FixedPreloadSizeProvider<String>(squareSize, squareSize)
         val preloader = RecyclerViewPreloader(
             Glide.with(this), mAdapter, sizeProvider, 5
         )
 
-        textEmpty = view.findViewById(R.id.message_empty_pl)
-        progressBar = view.findViewById<ProgressBar>(R.id.progress_bar_pl).apply {
-            visibility = View.VISIBLE
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_photo_list, container, false).apply {
+            textEmpty = findViewById(R.id.message_empty_pl)
+            progressBar = findViewById<ProgressBar>(R.id.progress_bar_pl).apply {
+                visibility = View.VISIBLE
+            }
+            // list
+            findViewById<RecyclerView>(R.id.photo_list).apply {
+                layoutManager = GridLayoutManager(this@PhotoListFragment.context, spanCount)
+                adapter = mAdapter
+                addOnScrollListener(preloader)
+            }
         }
-
-        // list
-        view.findViewById<RecyclerView>(R.id.photo_list).apply {
-            layoutManager = GridLayoutManager(context, spanCount)
-            adapter = mAdapter
-            addOnScrollListener(preloader)
-        }
-        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        ViewModelProvider(this).get(PhotoListViewModel::class.java).apply {
+        viewModel = ViewModelProvider(requireActivity()).get(PhotosViewModel::class.java)
+        viewModel.apply {
             // request photo URLs
-            getPhotosURLsByBreed(args.breedKeyword)
+            getPhotosURLsByBreed(args.breedKeyword, args.breedHyphenated)
             // observe photo URLs
-            urlList.observe(viewLifecycleOwner, Observer { urls: MutableList<String> ->
+            urlList.observe(viewLifecycleOwner, Observer { urls: List<String> ->
                 if (urls.isEmpty())
                     textEmpty.visibility = View.VISIBLE
                 else {
                     textEmpty.visibility = View.GONE
-                    mAdapter.update(urls, args.breedHyphenated)
+                    mAdapter.update(urls)
                 }
                 progressBar.visibility = View.GONE
             })

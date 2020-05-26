@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".photo.PhotoFragment">
+    tools:context=".listphoto.PhotoFragment">
 
-    <ImageView
-        android:id="@+id/photo"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2_photos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/photo_of_dog"
+        android:orientation="vertical"
         />
 
 </FrameLayout>

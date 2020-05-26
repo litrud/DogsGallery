@@ -46,28 +46,22 @@ class PhotoListAdapter(private val fragment: Fragment,
             .into(holder.imageView)
 
         holder.cardView.setOnClickListener {
-            // pass argument within the action
-            val action = PhotoListFragmentDirections.actionPhotoListFragmentToPhotoFragment(url)
+            val action = PhotoListFragmentDirections.actionPhotoListFragmentToPhotoFragment(
+                position
+            )
             it.findNavController().navigate(action)
         }
     }
 
-    fun update(links: MutableList<String>, breedHyphenated: String) {
-        // first select from links only those links that contain breedHyphenated
-        val urls = mutableListOf<String>()
-        links.forEach {
-            if (it.contains(breedHyphenated))
-                urls.add(it)
-        }
-        urlList = urls
-
+    fun update(links: List<String>) {
+        urlList = links
         notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int
             = urlList.size
 
-    override fun getPreloadItems(position: Int): MutableList<String> {
+    override fun getPreloadItems(position: Int): List<String> {
         return urlList.subList(position, position + 1)
     }
 

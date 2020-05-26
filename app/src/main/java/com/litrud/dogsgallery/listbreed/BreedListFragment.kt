@@ -25,18 +25,17 @@ class BreedListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_breed_list, container, false)
-
-        textEmpty = view.findViewById(R.id.message_empty_bl)
-        progressBar = view.findViewById<ProgressBar>(R.id.progress_bar_bl).apply {
-            visibility = View.VISIBLE
+        return inflater.inflate(R.layout.fragment_breed_list, container, false).apply {
+            textEmpty = findViewById(R.id.message_empty_bl)
+            progressBar = findViewById<ProgressBar>(R.id.progress_bar_bl).apply {
+                visibility = View.VISIBLE
+            }
+            // list
+            findViewById<RecyclerView>(R.id.breed_list).apply {
+                layoutManager = GridLayoutManager(this@BreedListFragment.context, 1)
+                adapter = mAdapter
+            }
         }
-
-        view.findViewById<RecyclerView>(R.id.breed_list).apply {
-            layoutManager = GridLayoutManager(context, 1)
-            adapter = mAdapter
-        }
-        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
