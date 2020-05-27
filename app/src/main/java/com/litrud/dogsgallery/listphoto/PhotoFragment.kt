@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.litrud.dogsgallery.R
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class PhotoFragment : Fragment() {
-    private val viewModel: PhotosViewModel by viewModel()
+    private val viewModel: PhotosViewModel by sharedViewModel()
     private lateinit var viewPager2: ViewPager2
     private var position: Int = 0
 
@@ -31,8 +30,8 @@ class PhotoFragment : Fragment() {
         viewPager2 = view.findViewById(R.id.viewPager2_photos)
         viewPager2.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = viewModel.getItemCount()
-            override fun createFragment(position: Int)
-                    = PhotoPage.newInstance(viewModel.getUrl(position))
+            override fun createFragment(position: Int) =
+                PhotoPage.newInstance(viewModel.getUrl(position))
         }
         viewPager2.setCurrentItem(position, false)
 

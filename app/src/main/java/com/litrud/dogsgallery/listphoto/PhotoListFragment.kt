@@ -15,11 +15,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.litrud.dogsgallery.R
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class PhotoListFragment : Fragment() {
-    private val viewModel: PhotosViewModel by viewModel()
+    private val viewModel: PhotosViewModel by sharedViewModel()
     private lateinit var args: PhotoListFragmentArgs
     private lateinit var textEmpty: TextView
     private lateinit var progressBar: ProgressBar
