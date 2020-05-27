@@ -9,10 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.litrud.dogsgallery.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PhotoFragment : Fragment() {
-    private lateinit var viewModel: PhotosViewModel
+    private val viewModel: PhotosViewModel by viewModel()
     private lateinit var viewPager2: ViewPager2
     private var position: Int = 0
 
@@ -23,8 +24,6 @@ class PhotoFragment : Fragment() {
         arguments?.let {
             position = PhotoFragmentArgs.fromBundle(it).position
         }
-
-        viewModel = ViewModelProvider(requireActivity()).get(PhotosViewModel::class.java)
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_photo, container, false)

@@ -1,21 +1,23 @@
 package com.litrud.dogsgallery.listbreed
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
 import com.litrud.dogsgallery.network.apiobject.ApiObjectMapString
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class BreedListFragment : Fragment() {
+    private val viewModel: BreedListViewModel by viewModel()
+
     private val mAdapter = BreedListAdapter()
     private lateinit var textEmpty: TextView
     private lateinit var progressBar: ProgressBar
@@ -40,11 +42,10 @@ class BreedListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ViewModelProvider(this).get(BreedListViewModel::class.java).apply {
-            // request breed list
-            getListAllBreed()
-            // observe breed list
-            breedsApiObjectMapString.observe(viewLifecycleOwner, Observer { obj: ApiObjectMapString? ->
+        viewModel.getListAllBreed()
+        viewModel.breedsApiObjectMapString.observe(
+            viewLifecycleOwner,
+            Observer { obj: ApiObjectMapString? ->
                 obj?.let {
                     if (obj.message.isEmpty())
                         textEmpty.visibility = View.VISIBLE
@@ -55,6 +56,5 @@ class BreedListFragment : Fragment() {
                 }
                 progressBar.visibility = View.GONE
             })
-        }
     }
 }

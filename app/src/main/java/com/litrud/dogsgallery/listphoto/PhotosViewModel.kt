@@ -9,18 +9,20 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PhotosViewModel : ViewModel() {
+class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel() {
     val urlList = MutableLiveData<List<String>>()
 
     fun getPhotosURLsByBreed(breedKeyword: String, breedHyphenated: String) {
-        DogsApiRepository.getPhotosURLsByBreed(breedKeyword).enqueue(
+        dogRepository.getPhotosURLsByBreed(breedKeyword).enqueue(
             object : Callback<ApiObjectListString> {
                 override fun onFailure(call: Call<ApiObjectListString>, t: Throwable) {
                     Log.e("LITRUD", "onFailure in getPhotosByBreed()")
                     t.printStackTrace()
                 }
-                override fun onResponse(call: Call<ApiObjectListString>,
-                                        response: Response<ApiObjectListString>) {
+                override fun onResponse(
+                    call: Call<ApiObjectListString>,
+                    response: Response<ApiObjectListString>
+                ) {
                     // get response
                     val apiObject = response.body()
                     // get list of URLs of photos

@@ -6,8 +6,6 @@ apply plugin: 'kotlin-android-extensions'
 // To generate Kotlin code suitable for Kotlin-only modules
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
-//apply plugin: 'kotlin-kapt'
-
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -18,6 +16,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,6 +28,14 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -44,17 +51,22 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "org.koin:koin-androidx-fragment:$koin_version"
+    implementation "org.koin:koin-androidx-ext:$koin_version"
 
     /*  Kotlin Navigation component
         https://developer.android.com/guide/navigation/navigation-getting-started   */
-    def nav_version = "2.3.0-alpha06"
+    def nav_version = '2.3.0-beta01'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     // Dynamic Feature Module Support
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.0-beta01"
 
     /*  Glide
         http://bumptech.github.io/glide/
@@ -68,7 +80,7 @@ dependencies {
         transitive = false
     }
 
-//    kapt 'com.github.bumptech.glide:compiler:4.11.0'
-
     implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
+
+    implementation 'com.android.support:multidex:1.0.3'
 }

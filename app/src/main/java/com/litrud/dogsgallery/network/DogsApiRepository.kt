@@ -5,19 +5,18 @@ import com.litrud.dogsgallery.network.apiobject.ApiObjectMapString
 import com.litrud.dogsgallery.network.apiobject.ApiObjectStringString
 import retrofit2.Call
 
-object DogsApiRepository {
-    private val webservice: DogsApiWebservice = DogsApiWebservice.create()
+class DogsApiRepository(private val dogService: DogsApiWebservice) {
 
-    fun getListAllBreed() :
-            Call<ApiObjectMapString> = webservice.getListAllBreed()
+    fun getListAllBreed():
+            Call<ApiObjectMapString> = dogService.getListAllBreed()
 
-    fun getPhotosURLsByBreed(breed: String) :
-            Call<ApiObjectListString> = webservice.getPhotosURLsByBreed(breed)
+    fun getPhotosURLsByBreed(breed: String):
+            Call<ApiObjectListString> = dogService.getPhotosURLsByBreed(breed)
 
-    fun getRandomPhotoByBreed(breed: String) :
-            Call<ApiObjectStringString> = webservice.getRandomPhotoByBreed(breed)
+    fun getRandomPhotoByBreed(breed: String):
+            Call<ApiObjectStringString> = dogService.getRandomPhotoByBreed(breed)
 
-    fun getRandomPhoto() :
-            Call<ApiObjectStringString> = webservice.getRandomPhoto()
+    fun getRandomPhoto():
+            Call<ApiObjectStringString> = dogService.getRandomPhoto()
 
 }

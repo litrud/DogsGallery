@@ -9,21 +9,21 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.litrud.dogsgallery.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PhotoListFragment : Fragment() {
+    private val viewModel: PhotosViewModel by viewModel()
     private lateinit var args: PhotoListFragmentArgs
     private lateinit var textEmpty: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var mAdapter: PhotoListAdapter
-    private lateinit var viewModel: PhotosViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +66,6 @@ class PhotoListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(PhotosViewModel::class.java)
         viewModel.apply {
             // request photo URLs
             getPhotosURLsByBreed(args.breedKeyword, args.breedHyphenated)

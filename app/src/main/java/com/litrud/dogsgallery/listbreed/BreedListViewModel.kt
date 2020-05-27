@@ -10,12 +10,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BreedListViewModel : ViewModel() {
+class BreedListViewModel(private val dogRepository: DogsApiRepository) : ViewModel() {
     val breedsApiObjectMapString: MutableLiveData<ApiObjectMapString> = MutableLiveData()
     val randomPhotoApiObjectStringString: MutableLiveData<ApiObjectStringString> = MutableLiveData()
 
     fun getListAllBreed() {
-        DogsApiRepository.getListAllBreed().enqueue(object : Callback<ApiObjectMapString> {
+        dogRepository.getListAllBreed().enqueue(object : Callback<ApiObjectMapString> {
             override fun onFailure(call: Call<ApiObjectMapString>, t: Throwable) {
                 Log.e("LITRUD", "onFailure in getListAllBreeds()")
                 t.printStackTrace()
@@ -27,7 +27,7 @@ class BreedListViewModel : ViewModel() {
     }
 
     fun getRandomPhotoByBreed(breed : String) {
-        DogsApiRepository.getRandomPhotoByBreed(breed).enqueue(object : Callback<ApiObjectStringString> {
+        dogRepository.getRandomPhotoByBreed(breed).enqueue(object : Callback<ApiObjectStringString> {
             override fun onFailure(call: Call<ApiObjectStringString>, t: Throwable) {
                 Log.e("LITRUD", "onFailure in getRandomPhotoByBreed()")
                 t.printStackTrace()
