@@ -3,9 +3,12 @@ package com.litrud.dogsgallery.listphoto
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.litrud.dogsgallery.R
 
@@ -33,16 +36,16 @@ class PhotoPage : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Glide.with(this)
             .load(url)
-            .placeholder(R.drawable.ic_launcher_background)
+            .placeholder(R.drawable.ic_pet_loading_foreground)
             .into(imageView)
     }
 
     companion object {
         @JvmStatic
         fun newInstance(url: String) = PhotoPage().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_URL, url)
-                }
+            arguments = Bundle().apply {
+                putString(ARG_URL, url)
             }
+        }
     }
 }

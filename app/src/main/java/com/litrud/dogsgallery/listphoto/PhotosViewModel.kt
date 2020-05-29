@@ -40,6 +40,7 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
             if (it.contains(breedHyphenated))
                 subUrls.add(it)
         }
+        // notify observers
         urlList.value = subUrls
     }
 

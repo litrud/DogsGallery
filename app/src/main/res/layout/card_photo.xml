@@ -11,9 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:layout_margin="1dp"
         android:contentDescription="@string/recycler_view_item"
         tools:src="@drawable/ic_launcher_background"
+        />
+    <ImageView
+        android:src="@drawable/frame_inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/frame"
+        />
+    <View
+        android:background="@drawable/frame_outer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
 
 </androidx.cardview.widget.CardView>

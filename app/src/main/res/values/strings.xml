@@ -1,14 +1,16 @@
 <resources>
     <string name="app_name">Dogs Gallery</string>
 
+    <!--  toolbar titles  -->
+    <string name="breeds">Breeds</string>
+    <string name="by_breed">by breed</string>
+
     <!--  descriptions  -->
     <string name="recycler_view_item">List item</string>
     <string name="photo_of_dog">Photo of dog</string>
+    <string name="frame">frame</string>
 
     <!--  messages  -->
     <string name="msg_empty">Empty</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

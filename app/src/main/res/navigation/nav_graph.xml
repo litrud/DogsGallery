@@ -15,6 +15,9 @@
             android:id="@+id/action_breedListFragment_to_photoListFragment"
             app:destination="@id/photoListFragment">
             <argument
+                android:name="breedFull"
+                app:argType="string" />
+            <argument
                 android:name="breedHyphenated"
                 app:argType="string" />
             <argument
@@ -28,6 +31,9 @@
         android:name="com.litrud.dogsgallery.listphoto.PhotoListFragment"
         android:label="PhotoList"
         tools:layout="@layout/fragment_photo_list" >
+        <argument
+            android:name="breedFull"
+            app:argType="string" />
         <argument
             android:name="breedHyphenated"
             app:argType="string" />

@@ -7,10 +7,11 @@ import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
+import java.util.*
 
 class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>() {
 
-    private var breedList = mutableListOf<String>()
+    private var breedListFull = mutableListOf<String>()
     private var breedListHyphenated = mutableListOf<String>()
     private var breedListKeyword = mutableListOf<String>()
 
@@ -26,10 +27,11 @@ class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>()
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.textView.text = breedList[position]
+        holder.textView.text = breedListFull[position]
         holder.cardView.setOnClickListener {
             // pass arguments within the action
             val action = BreedListFragmentDirections.actionBreedListFragmentToPhotoListFragment(
+                breedListFull[position],
                 breedListHyphenated[position],
                 breedListKeyword[position]
             )
@@ -43,23 +45,23 @@ class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>()
     }
 
     private fun extractMap(map: Map<String, MutableList<String>>) {
-        breedList.clear()
+        breedListFull.clear()
         breedListHyphenated.clear()
         breedListKeyword.clear()
         for ((key, value) in map) {
             if (value.isNotEmpty()) {
                 value.forEach { v ->
-                    breedList.add("$key $v")
+                    breedListFull.add("$key $v")
                     breedListHyphenated.add("$key-$v")
                     breedListKeyword.add(key)
                 }
             } else {
-                breedList.add(key)
+                breedListFull.add(key)
                 breedListHyphenated.add(key)
                 breedListKeyword.add(key)
             }
         }
     }
 
-    override fun getItemCount(): Int = breedList.size
+    override fun getItemCount(): Int = breedListFull.size
 }

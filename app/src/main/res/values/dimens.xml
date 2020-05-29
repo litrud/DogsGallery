@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="height_bottom_navigation_view">70dp</dimen>
+    <dimen name="height_appbar">200dp</dimen>
+    <dimen name="height_toolbar">56dp</dimen>
+    <dimen name="height_summary">256dp</dimen>
 </resources>

@@ -2,10 +2,36 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+    </style>
+
+    <style name="TextStyle" parent="android:Widget.TextView">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="TextStyle.Card">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:shadowColor">@color/textShadow</item>
+        <item name="android:shadowRadius">20</item>
+    </style>
+    <style name="TextStyle.Message">
+        <item name="android:textColor">@color/textMsg</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+    <style name="TextStyle.Appbar">
+        <item name="android:textColor">@color/colorAccentExtra</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+
+    <style name="ProgressBarStyle" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/progressBar</item>
+    </style>
+
+    <style name="App.Theme.ToolbarTitleUppercase" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textAllCaps">true</item>
     </style>
 
 </resources>

@@ -2,11 +2,11 @@ package com.litrud.dogsgallery.listphoto
 
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,16 +19,19 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class PhotoListFragment : Fragment() {
+    private lateinit var myActivity: AppCompatActivity
     private val viewModel: PhotosViewModel by sharedViewModel()
     private lateinit var args: PhotoListFragmentArgs
     private lateinit var textEmpty: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var mAdapter: PhotoListAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         args = PhotoListFragmentArgs.fromBundle(requireArguments())
 
         // number of columns in list
@@ -50,18 +53,29 @@ class PhotoListFragment : Fragment() {
         )
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_photo_list, container, false).apply {
-            textEmpty = findViewById(R.id.message_empty_pl)
-            progressBar = findViewById<ProgressBar>(R.id.progress_bar_pl).apply {
-                visibility = View.VISIBLE
-            }
-            // list
-            findViewById<RecyclerView>(R.id.photo_list).apply {
+        val view = inflater.inflate(R.layout.fragment_photo_list, container, false)
+
+        // customize the toolbar
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar).apply {
+            title = args.breedFull
+        }
+        myActivity = (activity as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_chevron_left_red)
+        }
+
+        textEmpty = view.findViewById(R.id.message_empty_pl)
+        progressBar = view.findViewById(R.id.progress_bar_pl)
+
+        // list
+        recyclerView = view.findViewById<RecyclerView>(R.id.photo_list).apply {
                 layoutManager = GridLayoutManager(this@PhotoListFragment.context, spanCount)
                 adapter = mAdapter
                 addOnScrollListener(preloader)
-            }
         }
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,5 +94,12 @@ class PhotoListFragment : Fragment() {
                 progressBar.visibility = View.GONE
             })
         }
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            android.R.id.home -> myActivity.onBackPressed()
+        }
+        return false
     }
 }

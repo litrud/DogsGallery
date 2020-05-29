@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="colorBackground">#000000</color>
+    <color name="colorPrimary">#757575</color>
+    <color name="colorPrimaryDark">#232323</color>
+    <color name="colorAccent">#C80000</color>
+    <color name="colorAccentExtra">#FF9800</color>
+
+    <color name="colorBackground">@color/colorPrimary</color>
+    <color name="colorCard">#FFFFFF</color>
+    <color name="colorFrame">#FFFFFF</color>
+
+    <color name="text">#484848</color>
+    <color name="textShadow">#FFFFFF</color>
+    <color name="textMsg">#FFFFFF</color>
+    <color name="textTitle">@color/textMsg</color>
+
+    <color name="progressBar">@color/colorAccent</color>
 </resources>

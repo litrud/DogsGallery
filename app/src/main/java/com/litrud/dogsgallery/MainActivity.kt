@@ -3,9 +3,9 @@ package com.litrud.dogsgallery
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-/* todo wonders whether !
+/* todo !
     after "terrier fox" breeds are not loaded into the list.
-    !!! see PhotoListViewModel on line 27. list size = 1000 on request "terrier" breed
+    see PhotoViewModel, list size = 1000 on request "terrier" breed
  */
 
 /**

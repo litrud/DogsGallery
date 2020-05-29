@@ -5,7 +5,7 @@
     android:id="@+id/photo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:contentDescription="@string/photo_of_dog"
     android:background="@color/colorBackground"
-    tools:src="@drawable/ic_launcher_background"
+    android:contentDescription="@string/photo_of_dog"
+    tools:src="@drawable/ic_pet_loading_foreground"
     />
