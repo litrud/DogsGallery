@@ -1,5 +1,8 @@
 package com.litrud.dogsgallery.listbreed
 
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
+import com.litrud.dogsgallery.network.NetworkConnectionBroadcastReceiver
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -22,6 +26,7 @@ class BreedListFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var toolbar: Toolbar
+    private val connectionReceiver = NetworkConnectionBroadcastReceiver(qetNetworkCallback())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,11 +34,9 @@ class BreedListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_breed_list, container, false).apply {
-            toolbar = findViewById<Toolbar>(R.id.toolbar).apply {
-                title = getString(R.string.breeds)
-            }
+            toolbar = findViewById(R.id.toolbar)
             textMessage = findViewById(R.id.message_empty_bl)
-            progressBar = findViewById<ProgressBar>(R.id.progress_bar_bl)
+            progressBar = findViewById(R.id.progress_bar_bl)
             recyclerView = findViewById<RecyclerView>(R.id.breed_list).apply {
                 layoutManager = GridLayoutManager(this@BreedListFragment.context, 1)
                 adapter = mAdapter
@@ -43,29 +46,59 @@ class BreedListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.apply {
             // request data
             getListAllBreed()
 
             breedMap.observe(viewLifecycleOwner, Observer {
-                    map: Map<String, MutableList<String>> ->
+                    map: Map<String, MutableList<String>> -> run {
                         if (map.isEmpty()) {
-                            textMessage.text = R.string.msg_empty.toString()
-                            textMessage.visibility = View.VISIBLE
+                            showMessage(R.string.msg_empty.toString())
                         } else {
-                            textMessage.visibility = View.GONE
                             mAdapter.update(map)
+                            showList()
                         }
-                        progressBar.visibility = View.GONE
+                    }
             })
-
             serverErrorMessage.observe(viewLifecycleOwner, Observer {
-                    errMsg: String ->
-                        textMessage.text = errMsg
-                        textMessage.visibility = View.VISIBLE
-                        progressBar.visibility = View.GONE
-                        toolbar.title = ""
+                    servErrMsg: String -> showMessage(servErrMsg)
             })
+        }
+    }
+
+    override fun onResume() { super.onResume()
+        requireActivity().registerReceiver(
+            connectionReceiver,
+            IntentFilter(Intent.ACTION_MANAGE_NETWORK_USAGE)
+        )
+    }
+
+    override fun onPause() { super.onPause()
+        requireActivity().unregisterReceiver(connectionReceiver)
+    }
+
+    private fun showList() {
+        textMessage.visibility = View.VISIBLE
+        textMessage.visibility = View.GONE
+        progressBar.visibility = View.GONE
+        toolbar.title = getString(R.string.breeds)
+    }
+
+    private fun showMessage(message: String) {
+        textMessage.text = message
+        textMessage.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
+        toolbar.title = ""
+    }
+
+
+    private fun qetNetworkCallback() = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) { super.onAvailable(network)
+            showList()
+        }
+        override fun onUnavailable() { super.onUnavailable()
+            showMessage("Network unavailable")
         }
     }
 }

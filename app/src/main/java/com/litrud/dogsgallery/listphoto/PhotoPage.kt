@@ -36,7 +36,7 @@ class PhotoPage : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Glide.with(this)
             .load(url)
-            .placeholder(R.drawable.ic_pet_loading_foreground)
+            .placeholder(R.drawable.ic_placeholder)
             .into(imageView)
     }
 

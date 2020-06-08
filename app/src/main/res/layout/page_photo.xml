@@ -7,5 +7,5 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:contentDescription="@string/photo_of_dog"
-    tools:src="@drawable/ic_pet_loading_foreground"
+    tools:src="@drawable/ic_placeholder"
     />

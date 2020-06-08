@@ -40,7 +40,7 @@ class PhotoListAdapter(private val fragment: Fragment,
 
         Glide.with(fragment)
             .load(url)
-            .placeholder(R.drawable.ic_pet_loading_foreground)
+            .placeholder(R.drawable.ic_placeholder)
             .centerCrop()
             .override(imageWidthPixels, imageHeightPixels)
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -69,7 +69,7 @@ class PhotoListAdapter(private val fragment: Fragment,
     override fun getPreloadRequestBuilder(url: String): RequestBuilder<*>? {
         return Glide.with(fragment)
             .load(url)
-            .placeholder(R.drawable.ic_pet_loading_foreground)
+            .placeholder(R.drawable.ic_placeholder)
             .centerCrop()
             .override(imageWidthPixels, imageHeightPixels)
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
