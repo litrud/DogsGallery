@@ -1,8 +1,5 @@
-package com.litrud.dogsgallery.network
+package com.litrud.dogsgallery.network.apiobject
 
-import com.litrud.dogsgallery.network.apiobject.ApiObjectListString
-import com.litrud.dogsgallery.network.apiobject.ApiObjectMapString
-import com.litrud.dogsgallery.network.apiobject.ApiObjectStringString
 import retrofit2.Call
 
 class DogsApiRepository(private val dogService: DogsApiWebservice) {

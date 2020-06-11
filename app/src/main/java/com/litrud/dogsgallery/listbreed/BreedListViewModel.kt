@@ -3,7 +3,7 @@ package com.litrud.dogsgallery.listbreed
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.litrud.dogsgallery.network.DogsApiRepository
+import com.litrud.dogsgallery.network.apiobject.DogsApiRepository
 import com.litrud.dogsgallery.network.apiobject.ApiObjectMapString
 import retrofit2.Call
 import retrofit2.Callback

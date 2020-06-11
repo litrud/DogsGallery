@@ -1,8 +1,5 @@
 package com.litrud.dogsgallery.listbreed
 
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
-import com.litrud.dogsgallery.network.NetworkConnectionBroadcastReceiver
+import com.litrud.dogsgallery.network.monitoring.Event
+import com.litrud.dogsgallery.network.monitoring.NetworkEvents
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -26,7 +24,6 @@ class BreedListFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var toolbar: Toolbar
-    private val connectionReceiver = NetworkConnectionBroadcastReceiver(qetNetworkCallback())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,24 +59,27 @@ class BreedListFragment : Fragment() {
                     }
             })
             serverErrorMessage.observe(viewLifecycleOwner, Observer {
-                    servErrMsg: String -> showMessage(servErrMsg)
+                    errorMessage: String -> showMessage(errorMessage)
+            })
+
+            // respond to network status changes
+            NetworkEvents.observe(viewLifecycleOwner, Observer {
+                when(it) {
+                    Event.ConnectivityAvailable ->
+                        if (it.networkState.isConnected) {
+                            showList()
+                        }
+                    Event.ConnectivityLost ->
+                        if ( ! it.networkState.isConnected) {
+                            showMessage(getString(R.string.msg_network_unavailable))
+                        }
+                }
             })
         }
     }
 
-    override fun onResume() { super.onResume()
-        requireActivity().registerReceiver(
-            connectionReceiver,
-            IntentFilter(Intent.ACTION_MANAGE_NETWORK_USAGE)
-        )
-    }
-
-    override fun onPause() { super.onPause()
-        requireActivity().unregisterReceiver(connectionReceiver)
-    }
-
     private fun showList() {
-        textMessage.visibility = View.VISIBLE
+        recyclerView.visibility = View.VISIBLE
         textMessage.visibility = View.GONE
         progressBar.visibility = View.GONE
         toolbar.title = getString(R.string.breeds)
@@ -88,17 +88,8 @@ class BreedListFragment : Fragment() {
     private fun showMessage(message: String) {
         textMessage.text = message
         textMessage.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
         progressBar.visibility = View.GONE
         toolbar.title = ""
-    }
-
-
-    private fun qetNetworkCallback() = object : ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) { super.onAvailable(network)
-            showList()
-        }
-        override fun onUnavailable() { super.onUnavailable()
-            showMessage("Network unavailable")
-        }
     }
 }
