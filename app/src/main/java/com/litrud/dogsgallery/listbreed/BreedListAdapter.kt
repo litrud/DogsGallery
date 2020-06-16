@@ -12,7 +12,6 @@ import java.util.*
 class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>() {
 
     private var breedListFull = mutableListOf<String>()
-    private var breedListHyphenated = mutableListOf<String>()
     private var breedListKeyword = mutableListOf<String>()
 
     inner class CardViewHolder(itemView: CardView) : RecyclerView.ViewHolder(itemView) {
@@ -32,7 +31,6 @@ class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>()
             // pass arguments within the action
             val action = BreedListFragmentDirections.actionBreedListFragmentToPhotoListFragment(
                 breedListFull[position],
-                breedListHyphenated[position],
                 breedListKeyword[position]
             )
             it.findNavController().navigate(action)
@@ -46,22 +44,20 @@ class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>()
 
     private fun extractMap(map: Map<String, MutableList<String>>) {
         breedListFull.clear()
-        breedListHyphenated.clear()
         breedListKeyword.clear()
         for ((key, value) in map) {
             if (value.isNotEmpty()) {
                 value.forEach { v ->
                     breedListFull.add("$key $v")
-                    breedListHyphenated.add("$key-$v")
                     breedListKeyword.add(key)
                 }
             } else {
                 breedListFull.add(key)
-                breedListHyphenated.add(key)
                 breedListKeyword.add(key)
             }
         }
     }
 
-    override fun getItemCount(): Int = breedListFull.size
+    override fun getItemCount(): Int
+            = breedListFull.size
 }

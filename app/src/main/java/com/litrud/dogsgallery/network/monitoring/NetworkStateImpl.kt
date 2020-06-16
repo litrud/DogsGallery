@@ -12,7 +12,10 @@ internal object NetworkStateImpl
     override var isConnected: Boolean = false
         set(value) {
             field = value
-            NetworkEvents.notify(if (value) Event.ConnectivityAvailable else Event.ConnectivityLost)
+            NetworkEvents.notify(
+                if (value) Event.ConnectivityAvailable
+                else Event.ConnectivityLost
+            )
         }
     override var networkCapabilities: NetworkCapabilities? = null
         set(value) {

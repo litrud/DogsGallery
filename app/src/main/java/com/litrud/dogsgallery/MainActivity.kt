@@ -1,12 +1,12 @@
 package com.litrud.dogsgallery
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
-/* todo !
-    after "terrier fox" breeds are not loaded into the list.
-    see PhotoViewModel, list size = 1000 on request "terrier" breed
- */
+import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
+import com.litrud.dogsgallery.network.monitoring.Event
+import com.litrud.dogsgallery.network.monitoring.NetworkEvents
 
 /**
  * An activity that inflates a layout that has a NavHostFragment.

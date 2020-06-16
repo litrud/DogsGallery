@@ -18,9 +18,6 @@
                 android:name="breedFull"
                 app:argType="string" />
             <argument
-                android:name="breedHyphenated"
-                app:argType="string" />
-            <argument
                 android:name="breedKeyword"
                 app:argType="string" />
         </action>
@@ -33,9 +30,6 @@
         tools:layout="@layout/fragment_photo_list" >
         <argument
             android:name="breedFull"
-            app:argType="string" />
-        <argument
-            android:name="breedHyphenated"
             app:argType="string" />
         <argument
             android:name="breedKeyword"

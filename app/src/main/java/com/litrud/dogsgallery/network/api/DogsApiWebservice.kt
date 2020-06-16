@@ -1,4 +1,4 @@
-package com.litrud.dogsgallery.network.apiobject
+package com.litrud.dogsgallery.network.api
 
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -10,6 +10,8 @@ import retrofit2.http.Path
 
     List All Breed
         https://dog.ceo/dog-api/documentation/
+    List All Sub_Breed
+        https://dog.ceo/dog-api/documentation/sub-breed
     Photos By Breed
         https://dog.ceo/dog-api/documentation/breed
     Random Photo By Breed
@@ -23,11 +25,26 @@ interface DogsApiWebservice {
     @GET("breeds/list/all")
     fun getListAllBreed() : Call<ApiObjectMapString>
 
+    @GET("breed/{breed}/list")
+    fun getListAllSubBreeds(
+        @Path("breed") breed: String
+    ) : Call<ApiObjectListString>
+
     @GET("breed/{breed}/images")
-    fun getPhotosURLsByBreed(@Path("breed") breed: String) : Call<ApiObjectListString>
+    fun getPhotosURLsByBreed(
+        @Path("breed") breed: String
+    ) : Call<ApiObjectListString>
+
+    @GET("breed/{breed}/{subbreed}/images")
+    fun getPhotosURLsBySubBreed(
+        @Path("breed") breed: String,
+        @Path("subbreed") subbreed: String
+    ): Call<ApiObjectListString>
 
     @GET("breed/{breed}/images/random")
-    fun getRandomPhotoByBreed(@Path("breed") breed: String) : Call<ApiObjectStringString>
+    fun getRandomPhotoByBreed(
+        @Path("breed") breed: String
+    ) : Call<ApiObjectStringString>
 
     @GET("breeds/image/random")
     fun getRandomPhoto() : Call<ApiObjectStringString>

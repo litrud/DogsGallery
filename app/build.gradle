@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.litrud.dogsgallery"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -62,25 +62,24 @@ dependencies {
 
     /*  Kotlin Navigation component
         https://developer.android.com/guide/navigation/navigation-getting-started   */
-    def nav_version = '2.3.0-beta01'
+    def nav_version = '2.3.0-rc01'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     // Dynamic Feature Module Support
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.0-beta01"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
 
     /*  Glide
-        http://bumptech.github.io/glide/
-     */
+        http://bumptech.github.io/glide/    */
     def glide_version = "4.11.0"
     implementation("com.github.bumptech.glide:glide:$glide_version") {
         exclude group: "com.android.support"
     }
+//    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
     implementation("com.github.bumptech.glide:recyclerview-integration:$glide_version") {
         // Excludes the support library because it's already included by Glide.
         transitive = false
     }
 
     implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
-
     implementation 'com.android.support:multidex:1.0.3'
 }

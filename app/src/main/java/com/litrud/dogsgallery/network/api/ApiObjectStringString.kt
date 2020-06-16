@@ -1,4 +1,4 @@
-package com.litrud.dogsgallery.network.apiobject
+package com.litrud.dogsgallery.network.api
 
 data class ApiObjectStringString(var message: String,
                                  var status: String)

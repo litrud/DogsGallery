@@ -23,13 +23,13 @@ object NetworkStateHolder
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager.registerNetworkCallback(
             NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    // todo wtf
 //                .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
 //                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                 .build(),
             NetworkCallbackImpl(holder)
-            /* todo
-                    manager.unregisterNetworkCallback ( networkCallback )
-                 */
         )
     }
 }

@@ -3,20 +3,23 @@ package com.litrud.dogsgallery.listphoto
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.litrud.dogsgallery.network.apiobject.DogsApiRepository
-import com.litrud.dogsgallery.network.apiobject.ApiObjectListString
+import com.litrud.dogsgallery.R
+import com.litrud.dogsgallery.network.api.DogsApiRepository
+import com.litrud.dogsgallery.network.api.ApiObjectListString
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel() {
+    val serverErrorMessage = MutableLiveData<Int>()
+    val subBreeds = MutableLiveData<List<String>>()
     val urlList = MutableLiveData<List<String>>()
 
-    fun getPhotosURLsByBreed(breedKeyword: String, breedHyphenated: String) {
-        dogRepository.getPhotosURLsByBreed(breedKeyword).enqueue(
+    fun getListAllSubBreeds(breed: String) =
+        dogRepository.getListAllSubBreeds(breed).enqueue(
             object : Callback<ApiObjectListString> {
                 override fun onFailure(call: Call<ApiObjectListString>, t: Throwable) {
-                    Log.e("LITRUD", "onFailure in getPhotosByBreed()")
+                    Log.e("LITRUD", "onFailure in getListAllSubBreeds()")
                     t.printStackTrace()
                 }
                 override fun onResponse(
@@ -25,24 +28,68 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
                 ) {
                     // get response
                     val apiObject = response.body()
-                    // get list of URLs of photos
-                    val urls = apiObject!!.message
-                    // select specific urls
-                    subBreedList(urls, breedHyphenated)
+
+                    if (apiObject == null)
+                        serverErrorMessage.value = R.string.msg_server_error
+                    else {
+                        // get list of dogs sub-breeds
+                        val subBreedsList = apiObject.message
+                        // notify observers
+                        subBreeds.value = subBreedsList
+                    }
+                }
+            }
+        )
+
+    fun getPhotosURLsByBreed(breedKeyword: String) =
+        dogRepository.getPhotosURLsByBreed(breedKeyword).enqueue(
+            object : Callback<ApiObjectListString> {
+                override fun onFailure(call: Call<ApiObjectListString>, t: Throwable) {
+                    Log.e("LITRUD", "onFailure in getPhotosURLsByBreed()")
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<ApiObjectListString>,
+                    response: Response<ApiObjectListString>
+                ) {
+                    // get response
+                    val apiObject = response.body()
+
+                    if (apiObject == null) {
+                        serverErrorMessage.value = R.string.msg_server_error
+                    } else {
+                        // get list of URLs of photos
+                        val urls = apiObject.message
+                        // notify observers
+                        urlList.value = urls
+                    }
                 }
             })
-    }
 
-    private fun subBreedList(urls: List<String>, breedHyphenated: String) {
-        // select from links only those links that contain breedHyphenated
-        val subUrls = mutableListOf<String>()
-        urls.forEach {
-            if (it.contains(breedHyphenated))
-                subUrls.add(it)
-        }
-        // notify observers
-        urlList.value = subUrls
-    }
+    fun getPhotosURLsBySubBreed(breed: String, subBreed: String) =
+        dogRepository.getPhotosURLsBySubBreed(breed, subBreed).enqueue(
+            object : Callback<ApiObjectListString> {
+                override fun onFailure(call: Call<ApiObjectListString>, t: Throwable) {
+                    Log.e("LITRUD", "onFailure in getPhotosURLsBySubBreed()")
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<ApiObjectListString>,
+                    response: Response<ApiObjectListString>
+                ) {
+                    // get response
+                    val apiObject = response.body()
+
+                    if (apiObject == null)
+                        serverErrorMessage.value = R.string.msg_server_error
+                    else {
+                        // get list of URLs of photos
+                        val subUrls = apiObject.message
+                        // notify observers
+                        urlList.value = subUrls
+                    }
+                }
+            })
 
     fun getUrl(position: Int)
             = urlList.value!![position]

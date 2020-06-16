@@ -12,6 +12,10 @@
 
     <!--  messages  -->
     <string name="msg_empty">Empty</string>
-    <string name="msg_network_unavailable">Network unavailable</string>
+    <string name="msg_internet_unavailable">Waiting for the Internet…</string>
+    <string name="msg_server_error">The server is temporarily unavailable.\nTry later</string>
+    <string name="msg_must_connected">Note that the internet\nmust be connected</string>
+    <string name="msg_fuck_1">FUCK one</string>
+    <string name="msg_fuck_2">FUCK two</string>
 
 </resources>
