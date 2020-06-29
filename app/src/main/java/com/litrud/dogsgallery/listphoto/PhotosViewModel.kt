@@ -6,14 +6,15 @@ import androidx.lifecycle.ViewModel
 import com.litrud.dogsgallery.R
 import com.litrud.dogsgallery.network.api.DogsApiRepository
 import com.litrud.dogsgallery.network.api.ApiObjectListString
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel() {
-    val serverErrorMessage = MutableLiveData<Int>()
     val subBreeds = MutableLiveData<List<String>>()
     val urlList = MutableLiveData<List<String>>()
+    val serverErrorMessage = MutableLiveData<Int>()
 
     fun getListAllSubBreeds(breed: String) =
         dogRepository.getListAllSubBreeds(breed).enqueue(

@@ -25,9 +25,6 @@ object NetworkStateHolder
             NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-                    // todo wtf
-//                .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
-//                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                 .build(),
             NetworkCallbackImpl(holder)
         )

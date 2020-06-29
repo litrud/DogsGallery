@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:contentDescription="@string/recycler_view_item"
-        tools:src="@drawable/ic_placeholder"
+        tools:src="@drawable/ic_paw_vector"
         />
     <ImageView
         android:src="@drawable/frame_inner"

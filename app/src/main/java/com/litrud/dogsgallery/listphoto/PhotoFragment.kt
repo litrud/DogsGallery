@@ -8,17 +8,22 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.litrud.dogsgallery.R
+import com.litrud.dogsgallery.network.monitoring.Event
+import com.litrud.dogsgallery.network.monitoring.NetworkEvents
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class PhotoFragment : Fragment() {
     private lateinit var myActivity: AppCompatActivity
     private val viewModel: PhotosViewModel by sharedViewModel()
-    private lateinit var viewPager2: ViewPager2
-    private var position: Int = 0
+    private lateinit var mAdapter: FragmentStateAdapter
+    private var positionInit: Int = 0
+    private var positionCurrent: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +31,8 @@ class PhotoFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         arguments?.let {
-            position = PhotoFragmentArgs.fromBundle(it).position
+            positionInit = PhotoFragmentArgs.fromBundle(it).position
+            positionCurrent = positionInit
         }
 
         // Inflate the layout for this fragment
@@ -40,15 +46,28 @@ class PhotoFragment : Fragment() {
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_chevron_left_red)
         }
 
-        viewPager2 = view.findViewById(R.id.viewPager2_photos)
-        viewPager2.adapter = object : FragmentStateAdapter(this) {
+        mAdapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = viewModel.getItemCount()
-            override fun createFragment(position: Int) =
-                PhotoPage.newInstance(viewModel.getUrl(position))
+            override fun createFragment(position: Int): Fragment {
+                positionCurrent = position
+                return PhotoPage.newInstance(viewModel.getUrl(position))
+            }
         }
-        viewPager2.setCurrentItem(position, false)
+
+        // ViewPager2
+        with(
+            view.findViewById<ViewPager2>(R.id.viewPager2_photos)
+        ) {
+            adapter = mAdapter
+            setCurrentItem(positionInit, false)
+        }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        subscribeToNetworkEvents()
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
@@ -56,5 +75,15 @@ class PhotoFragment : Fragment() {
             android.R.id.home -> myActivity.onBackPressed()
         }
         return false
+    }
+
+    private fun subscribeToNetworkEvents() {
+        NetworkEvents.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Event.ConnectivityAvailable ->
+                    if (mAdapter.itemCount == 0)
+                        mAdapter.notifyItemChanged(positionCurrent)
+            }
+        })
     }
 }

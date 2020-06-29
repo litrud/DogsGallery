@@ -7,7 +7,7 @@ import com.litrud.dogsgallery.network.monitoring.NetworkStateHolder.registerConn
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class DogsGalleryApplication: Application() {
+class DogsGalleryApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin{
