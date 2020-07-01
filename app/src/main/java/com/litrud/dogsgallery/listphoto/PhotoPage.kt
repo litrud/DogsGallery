@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.litrud.dogsgallery.R
+import com.squareup.picasso.Picasso
 
 
 private const val ARG_URL = "url"
@@ -23,7 +23,6 @@ class PhotoPage : Fragment() {
         arguments?.let {
             url = it.getString(ARG_URL)!!
         }
-
         return inflater.inflate(R.layout.page_photo, container, false).apply {
             imageView = findViewById(R.id.photo)
         }
@@ -31,9 +30,10 @@ class PhotoPage : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Glide.with(this)
+        Picasso.get()
             .load(url)
             .placeholder(R.drawable.ic_paw_vector)
+            .error(R.mipmap.error_img)
             .into(imageView)
     }
 

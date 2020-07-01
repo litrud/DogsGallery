@@ -12,9 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
-import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.litrud.dogsgallery.R
 import com.litrud.dogsgallery.network.monitoring.Event
 import com.litrud.dogsgallery.network.monitoring.NetworkEvents
@@ -50,13 +47,7 @@ class PhotoListFragment : Fragment() {
         val squareSize = determineItemWidth(columnsNumber)
 
         // list adapter
-        mAdapter = PhotoListAdapter(requireContext(), squareSize)
-
-        // list preloader
-        val sizeProvider = FixedPreloadSizeProvider<String>(squareSize, squareSize)
-        val preloader = RecyclerViewPreloader(
-            Glide.with(this), mAdapter, sizeProvider, 6
-        )
+        mAdapter = PhotoListAdapter(squareSize)
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_photo_list, container, false)
@@ -72,7 +63,6 @@ class PhotoListFragment : Fragment() {
             recyclerView = findViewById<RecyclerView>(R.id.photo_list).apply {
                 layoutManager = GridLayoutManager(this@PhotoListFragment.context, columnsNumber)
                 adapter = mAdapter
-                addOnScrollListener(preloader)
             }
         }
 
@@ -89,7 +79,7 @@ class PhotoListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showLoadingIndicator()
+        showLoadingIndicator()      // TODO *** in vain...
 
         // request sub-breeds list by breed
         viewModel.getListAllSubBreeds(breed)
@@ -140,7 +130,7 @@ class PhotoListFragment : Fragment() {
                 if (urls.isEmpty())
                     showMessage(getString(R.string.msg_empty))
                 else {
-                    mAdapter.update(urls)
+                    mAdapter.update(urls)       // TODO ***
                     showList()
                 }
             })

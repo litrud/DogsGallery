@@ -68,17 +68,10 @@ dependencies {
     // Dynamic Feature Module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
 
-    /*  Glide
-        http://bumptech.github.io/glide/    */
-    def glide_version = "4.11.0"
-    implementation("com.github.bumptech.glide:glide:$glide_version") {
-        exclude group: "com.android.support"
-    }
-//    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
-    implementation("com.github.bumptech.glide:recyclerview-integration:$glide_version") {
-        // Excludes the support library because it's already included by Glide.
-        transitive = false
-    }
+    /*  Picasso
+        https://github.com/square/picasso   */
+    def pic_version = '2.71828'
+    implementation "com.squareup.picasso:picasso:$pic_version"
 
     implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
     implementation 'com.android.support:multidex:1.0.3'
