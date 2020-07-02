@@ -13,13 +13,15 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
+import com.litrud.dogsgallery.di.sharedGraphViewModel
 import com.litrud.dogsgallery.network.monitoring.Event
 import com.litrud.dogsgallery.network.monitoring.NetworkEvents
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PhotoListFragment : Fragment() {
-    private val viewModel: PhotosViewModel by sharedViewModel()
+    private val viewModel: PhotosViewModel by sharedGraphViewModel(R.id.photo_gallery)
     private lateinit var containingActivity: AppCompatActivity
     private lateinit var args: PhotoListFragmentArgs
     private lateinit var textMessage: TextView
@@ -79,7 +81,7 @@ class PhotoListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showLoadingIndicator()      // TODO *** in vain...
+        //showLoadingIndicator()      // TODO *** in vain...
 
         // request sub-breeds list by breed
         viewModel.getListAllSubBreeds(breed)

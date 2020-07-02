@@ -97,4 +97,9 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
 
     fun getItemCount()
             = urlList.value?.size ?: -1
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("photosViewModel", "cleared")
+    }
 }

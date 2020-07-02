@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.litrud.dogsgallery.R
+import com.litrud.dogsgallery.di.sharedGraphViewModel
 import com.litrud.dogsgallery.network.monitoring.Event
 import com.litrud.dogsgallery.network.monitoring.NetworkEvents
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -20,7 +21,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class PhotoFragment : Fragment() {
     private lateinit var myActivity: AppCompatActivity
-    private val viewModel: PhotosViewModel by sharedViewModel()
+    private val viewModel: PhotosViewModel by sharedGraphViewModel(R.id.photo_gallery)
     private lateinit var mAdapter: FragmentStateAdapter
     private var positionInit: Int = 0
     private var positionCurrent: Int = 0

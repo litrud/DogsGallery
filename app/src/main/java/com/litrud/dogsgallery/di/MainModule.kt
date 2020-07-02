@@ -4,7 +4,6 @@ import com.litrud.dogsgallery.listbreed.BreedListViewModel
 import com.litrud.dogsgallery.listphoto.PhotosViewModel
 import com.litrud.dogsgallery.network.api.DogsApiRepository
 import com.litrud.dogsgallery.network.api.DogsApiWebservice
-import com.litrud.dogsgallery.network.monitoring.NetworkEventsSnackbar
 import org.koin.dsl.module
 import org.koin.androidx.viewmodel.dsl.viewModel
 
