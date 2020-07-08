@@ -36,6 +36,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    /*  For Kotlin Android Extensions.
+     New features (such as view cache in any class) are not complete, so we need to enable them. */
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {

@@ -10,14 +10,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BreedListViewModel(private val dogRepository: DogsApiRepository) : ViewModel() {
+class BreedListViewModel(
+    private val dogRepository: DogsApiRepository
+) : ViewModel() {
+
     val serverErrorMessage = MutableLiveData<Int>()
     val breedMap = MutableLiveData<Map<String, MutableList<String>>>()
 
     fun getListAllBreed() {
         dogRepository.getListAllBreed().enqueue(object : Callback<ApiObjectMapString> {
             override fun onFailure(call: Call<ApiObjectMapString>, t: Throwable) {
-                Log.e("LITRUD", "onFailure in getListAllBreeds()")
+//                Log.e("LITRUD", "onFailure in getListAllBreeds()")
                 t.printStackTrace()
             }
             override fun onResponse(
@@ -26,7 +29,6 @@ class BreedListViewModel(private val dogRepository: DogsApiRepository) : ViewMod
             ) {
                 // get response
                 val apiObject = response.body()
-
                 if (apiObject == null)
                     serverErrorMessage.value = R.string.msg_server_error
                 else {

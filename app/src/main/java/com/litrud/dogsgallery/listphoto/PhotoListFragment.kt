@@ -4,93 +4,70 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
 import com.litrud.dogsgallery.di.sharedGraphViewModel
 import com.litrud.dogsgallery.network.monitoring.Event
 import com.litrud.dogsgallery.network.monitoring.NetworkEvents
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_photo_list.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 
 class PhotoListFragment : Fragment() {
     private val viewModel: PhotosViewModel by sharedGraphViewModel(R.id.photo_gallery)
     private lateinit var containingActivity: AppCompatActivity
     private lateinit var args: PhotoListFragmentArgs
-    private lateinit var textMessage: TextView
-    private lateinit var progressBar: ProgressBar
     private lateinit var mAdapter: PhotoListAdapter
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var toolbar: Toolbar
-    private lateinit var breed: String
-    private lateinit var fullBreed: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        // get current breed
         args = PhotoListFragmentArgs.fromBundle(requireArguments())
-        breed = args.breedKeyword
-        fullBreed = args.breedFull
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val columnsNumber = determineColumnsNumber()
-        val squareSize = determineItemWidth(columnsNumber)
-
-        // list adapter
-        mAdapter = PhotoListAdapter(squareSize)
-
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_photo_list, container, false)
-
-        with(view) {
-            // customize toolbar
-            toolbar = findViewById<Toolbar>(R.id.toolbar).apply {
-                title = args.breedFull
-            }
-            textMessage = findViewById(R.id.message_empty_pl)
-            progressBar = findViewById(R.id.progress_bar_pl)
-            // list
-            recyclerView = findViewById<RecyclerView>(R.id.photo_list).apply {
-                layoutManager = GridLayoutManager(this@PhotoListFragment.context, columnsNumber)
-                adapter = mAdapter
-            }
-        }
-
         // set up Back button
-        containingActivity = (activity as AppCompatActivity).apply {
-            setSupportActionBar(toolbar)
+        containingActivity = (requireActivity() as AppCompatActivity).apply {
+//            setSupportActionBar(toolbar)   // kotlin android extension is not working here
+            setSupportActionBar(view.findViewById(R.id.toolbar))
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_chevron_left_red)
         }
-
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(
+        view: View, savedInstanceState: Bundle?
+    ) {
+        appbar_photos.setExpanded(
+            resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        )
 
-        //showLoadingIndicator()      // TODO *** in vain...
+        val columnsNumber = determineColumnsNumber()
+        val squareSize = determineItemWidth(columnsNumber)
+        toolbar.title = args.breedFull
+        mAdapter = PhotoListAdapter(squareSize, args.breedFull)
+        with(photo_list) {
+            layoutManager = GridLayoutManager(this@PhotoListFragment.context, columnsNumber)
+            adapter = mAdapter
+        }
 
         // request sub-breeds list by breed
-        viewModel.getListAllSubBreeds(breed)
-
+        viewModel.getListAllSubBreeds(args.breedKeyword)
         subscribeToData()
         subscribeToNetworkEvents()
     }
 
-    override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
+    override fun onOptionsItemSelected(
+        menuItem: MenuItem
+    ): Boolean {
         when (menuItem.itemId) {
             android.R.id.home ->
                 containingActivity.onBackPressed()
@@ -119,26 +96,26 @@ class PhotoListFragment : Fragment() {
                 // find sub-breed
                 var sub = ""
                 subBreeds.forEach {
-                    if (fullBreed.contains(it))
+                    if (args.breedFull.contains(it))
                         sub = it
                 }
                 // request photos URLs
                 if (sub == "")
-                    getPhotosURLsByBreed(breed)
+                    getPhotosURLsByBreed(args.breedKeyword)
                 else
-                    getPhotosURLsBySubBreed(breed, sub)
+                    getPhotosURLsBySubBreed(args.breedKeyword, sub)
             })
             urlList.observe(viewLifecycleOwner, Observer { urls: List<String> ->
                 if (urls.isEmpty())
                     showMessage(getString(R.string.msg_empty))
                 else {
-                    mAdapter.update(urls)       // TODO ***
+                    mAdapter.update(urls)
                     showList()
                 }
             })
             serverErrorMessage.observe(viewLifecycleOwner, Observer { errorMessage: Int ->
                 showMessage(getString(errorMessage))
-                toolbar.title = fullBreed
+                toolbar.title = args.breedFull
             })
         }
     }
@@ -147,29 +124,23 @@ class PhotoListFragment : Fragment() {
         NetworkEvents.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Event.ConnectivityAvailable ->
-                    if (mAdapter.itemCount == 0) viewModel.getListAllSubBreeds(breed)
+                    if (mAdapter.itemCount == 0) viewModel.getListAllSubBreeds(args.breedKeyword)
             }
         })
     }
 
-    private fun showLoadingIndicator() {
-        recyclerView.visibility = View.GONE
-        textMessage.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
-    }
-
     private fun showList() {
-        recyclerView.visibility = View.VISIBLE
-        textMessage.visibility = View.GONE
-        progressBar.visibility = View.GONE
-        toolbar.title = fullBreed
+        photo_list.visibility = View.VISIBLE
+        message_empty_pl.visibility = View.GONE
+        progress_bar_pl.visibility = View.GONE
+        toolbar.title = args.breedFull
     }
 
     private fun showMessage(message: String) {
-        textMessage.text = message
-        textMessage.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        progressBar.visibility = View.GONE
+        message_empty_pl.text = message
+        message_empty_pl.visibility = View.VISIBLE
+        photo_list.visibility = View.GONE
+        progress_bar_pl.visibility = View.GONE
         toolbar.title = ""
     }
 }

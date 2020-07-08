@@ -1,58 +1,46 @@
 package com.litrud.dogsgallery.listbreed
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
 import com.litrud.dogsgallery.network.monitoring.Event
 import com.litrud.dogsgallery.network.monitoring.NetworkEvents
+import kotlinx.android.synthetic.main.fragment_breed_list.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class BreedListFragment : Fragment() {
     private val viewModel: BreedListViewModel by viewModel()
     private val mAdapter = BreedListAdapter()
-    private lateinit var textMessage: TextView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var toolbar: Toolbar
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_breed_list, container, false)
-
-        with(view) {
-            toolbar = findViewById(R.id.toolbar)
-            textMessage = findViewById(R.id.message_empty_bl)
-            progressBar = findViewById(R.id.progress_bar_bl)
-            recyclerView = findViewById<RecyclerView>(R.id.breed_list).apply {
-                layoutManager = GridLayoutManager(this@BreedListFragment.context, 1)
-                adapter = mAdapter
-            }
-        }
-
-        return view
+        return inflater.inflate(R.layout.fragment_breed_list, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(
+        view: View, savedInstanceState: Bundle?
+    ) {
+        appbar_breeds.setExpanded(
+            resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        )
 
-        showLoadingIndicator()
+        with(breed_list) {
+            layoutManager = GridLayoutManager(this@BreedListFragment.context, 1)
+            adapter = mAdapter
+        }
 
         // request data
         viewModel.getListAllBreed()
-
         subscribeToData()
         subscribeToNetworkEvents()
     }
@@ -84,24 +72,18 @@ class BreedListFragment : Fragment() {
         })
     }
 
-    private fun showLoadingIndicator() {
-        recyclerView.visibility = View.GONE
-        textMessage.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
-    }
-
     private fun showList() {
-        recyclerView.visibility = View.VISIBLE
-        textMessage.visibility = View.GONE
-        progressBar.visibility = View.GONE
+        breed_list.visibility = View.VISIBLE
+        message_empty_bl.visibility = View.GONE
+        progress_bar_bl.visibility = View.GONE
         toolbar.title = getString(R.string.breeds)
     }
 
     private fun showMessage(message: String) {
-        textMessage.text = message
-        textMessage.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        progressBar.visibility = View.GONE
+        message_empty_bl.text = message
+        message_empty_bl.visibility = View.VISIBLE
+        breed_list.visibility = View.GONE
+        progress_bar_bl.visibility = View.GONE
         toolbar.title = ""
     }
 }

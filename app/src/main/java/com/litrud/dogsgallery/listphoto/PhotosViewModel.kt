@@ -11,7 +11,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel() {
+class PhotosViewModel(
+    private val dogRepository: DogsApiRepository
+) : ViewModel() {
+
     val subBreeds = MutableLiveData<List<String>>()
     val urlList = MutableLiveData<List<String>>()
     val serverErrorMessage = MutableLiveData<Int>()
@@ -20,7 +23,7 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
         dogRepository.getListAllSubBreeds(breed).enqueue(
             object : Callback<ApiObjectListString> {
                 override fun onFailure(call: Call<ApiObjectListString>, t: Throwable) {
-                    Log.e("LITRUD", "onFailure in getListAllSubBreeds()")
+//                    Log.e("LITRUD", "onFailure in getListAllSubBreeds()")
                     t.printStackTrace()
                 }
                 override fun onResponse(
@@ -29,7 +32,6 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
                 ) {
                     // get response
                     val apiObject = response.body()
-
                     if (apiObject == null)
                         serverErrorMessage.value = R.string.msg_server_error
                     else {
@@ -46,7 +48,7 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
         dogRepository.getPhotosURLsByBreed(breedKeyword).enqueue(
             object : Callback<ApiObjectListString> {
                 override fun onFailure(call: Call<ApiObjectListString>, t: Throwable) {
-                    Log.e("LITRUD", "onFailure in getPhotosURLsByBreed()")
+//                    Log.e("LITRUD", "onFailure in getPhotosURLsByBreed()")
                     t.printStackTrace()
                 }
                 override fun onResponse(
@@ -55,7 +57,6 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
                 ) {
                     // get response
                     val apiObject = response.body()
-
                     if (apiObject == null) {
                         serverErrorMessage.value = R.string.msg_server_error
                     } else {
@@ -80,7 +81,6 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
                 ) {
                     // get response
                     val apiObject = response.body()
-
                     if (apiObject == null)
                         serverErrorMessage.value = R.string.msg_server_error
                     else {
@@ -97,9 +97,4 @@ class PhotosViewModel(private val dogRepository: DogsApiRepository) : ViewModel(
 
     fun getItemCount()
             = urlList.value?.size ?: -1
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("photosViewModel", "cleared")
-    }
 }

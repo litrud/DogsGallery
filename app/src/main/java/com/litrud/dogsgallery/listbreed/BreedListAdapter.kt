@@ -1,39 +1,49 @@
 package com.litrud.dogsgallery.listbreed
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
-import java.util.*
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.card_breed.*
+
 
 class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>() {
 
     private var breedListFull = mutableListOf<String>()
     private var breedListKeyword = mutableListOf<String>()
 
-    inner class CardViewHolder(itemView: CardView) : RecyclerView.ViewHolder(itemView) {
-        val cardView = itemView
-        val textView: TextView = cardView.findViewById(R.id.text_breed)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
-        val cardView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.card_breed, parent, false)
-        return CardViewHolder(cardView as CardView)
+        return CardViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.card_breed, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.textView.text = breedListFull[position]
-        holder.cardView.setOnClickListener {
-            // pass arguments within the action
-            val action = BreedListFragmentDirections.actionBreedListFragmentToPhotoListFragment(
-                breedListFull[position],
-                breedListKeyword[position]
-            )
-            it.findNavController().navigate(action)
+        holder.bindItem(position)
+    }
+
+    override fun getItemCount(): Int
+            = breedListFull.size
+
+    inner class CardViewHolder(
+        override val containerView: View
+    ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        fun bindItem(position: Int) {
+            text_breed.text = breedListFull[position]
+
+            containerView.setOnClickListener {
+                // pass arguments within the action
+                val action = BreedListFragmentDirections.actionBreedListFragmentToPhotoListFragment(
+                    breedListFull[position],
+                    breedListKeyword[position]
+                )
+                it.findNavController().navigate(action)
+            }
         }
     }
 
@@ -57,7 +67,4 @@ class BreedListAdapter : RecyclerView.Adapter<BreedListAdapter.CardViewHolder>()
             }
         }
     }
-
-    override fun getItemCount(): Int
-            = breedListFull.size
 }

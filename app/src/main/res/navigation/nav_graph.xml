@@ -43,6 +43,9 @@
                 <argument
                     android:name="position"
                     app:argType="integer" />
+                <argument
+                    android:name="fullBreed"
+                    app:argType="string" />
             </action>
         </fragment>
         <fragment
@@ -53,6 +56,9 @@
             <argument
                 android:name="position"
                 app:argType="integer" />
+            <argument
+                android:name="fullBreed"
+                app:argType="string" />
         </fragment>
     </navigation>
 

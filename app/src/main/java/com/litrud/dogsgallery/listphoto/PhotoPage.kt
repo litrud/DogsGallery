@@ -5,36 +5,34 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.litrud.dogsgallery.R
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.page_photo.*
 
 
 private const val ARG_URL = "url"
 
 class PhotoPage : Fragment() {
     private lateinit var url: String
-    private lateinit var imageView: ImageView
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         arguments?.let {
             url = it.getString(ARG_URL)!!
         }
-        return inflater.inflate(R.layout.page_photo, container, false).apply {
-            imageView = findViewById(R.id.photo)
-        }
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.page_photo, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(
+        view: View, savedInstanceState: Bundle?
+    ) {
         Picasso.get()
             .load(url)
             .placeholder(R.drawable.ic_paw_vector)
             .error(R.mipmap.error_img)
-            .into(imageView)
+            .into(photo)
     }
 
     companion object {

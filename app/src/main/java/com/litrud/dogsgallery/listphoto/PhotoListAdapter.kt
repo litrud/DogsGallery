@@ -1,32 +1,30 @@
 package com.litrud.dogsgallery.listphoto
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.card_photo.*
 import java.util.*
 
 
 class PhotoListAdapter(
-    private val squareSize: Int
-) : RecyclerView.Adapter<PhotoListAdapter.ViewHolder>()
-{
-//    init {
-//        setHasStableIds(true)
-//    }
+    private val squareSize: Int,
+    private val fullBreed: String
+) : RecyclerView.Adapter<PhotoListAdapter.ViewHolder>() {
+
     private var urlList = Collections.emptyList<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoListAdapter.ViewHolder {
-        val cardView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.card_photo, parent, false)
-        return ViewHolder(cardView as CardView)
+        return ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.card_photo, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -36,19 +34,24 @@ class PhotoListAdapter(
     override fun getItemCount(): Int
             = urlList.size
 
-    inner class ViewHolder(val card: CardView) : RecyclerView.ViewHolder(card) {
+    inner class ViewHolder(
+        override val containerView: View
+    ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
         fun bindItem(position: Int) {
-            val imageView: ImageView = card.findViewById<ImageView>(R.id.image_view).apply {
+            val imageView = image_view.apply {
                 layoutParams.height = squareSize
             }
-            card.setOnClickListener {
+            picassoRequestCreator(urlList[position])
+                .into(imageView)
+
+            containerView.setOnClickListener {
                 val action = PhotoListFragmentDirections.actionPhotoListFragmentToPhotoFragment(
-                    position
+                    position,
+                    fullBreed
                 )
                 it.findNavController().navigate(action)
             }
-            picassoRequestCreator(urlList[position])    // TODO ***
-                .into(imageView)
         }
     }
 
@@ -61,11 +64,10 @@ class PhotoListAdapter(
         fun picassoRequestCreator(url: String?) : RequestCreator {
             return Picasso.get()
                 .load(url)
-                .resize(43, 43)
+                .resize(100, 100)
                 .placeholder(R.mipmap.ic_paw)
                 .error(R.mipmap.error_img)
-//                .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                .networkPolicy(NetworkPolicy.NO_STORE)
+                .centerCrop()
         }
     }
 }
