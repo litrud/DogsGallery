@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 /.idea/vcs.xml
+/app/release/
+/app/debug/
