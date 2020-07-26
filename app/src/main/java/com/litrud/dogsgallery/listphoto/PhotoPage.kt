@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.litrud.dogsgallery.R
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.page_photo.*
+import java.lang.Exception
 
 
 private const val ARG_URL = "url"
@@ -30,9 +32,13 @@ class PhotoPage : Fragment() {
     ) {
         Picasso.get()
             .load(url)
-            .placeholder(R.drawable.ic_paw_vector)
             .error(R.mipmap.error_img)
-            .into(photo)
+            .into(photo, object : Callback {
+                override fun onSuccess() {
+                    progress_bar_page.visibility = View.GONE
+                }
+                override fun onError(e: Exception?) { }
+            })
     }
 
     companion object {

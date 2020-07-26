@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.litrud.dogsgallery.R
 import com.litrud.dogsgallery.di.sharedGraphViewModel
 import com.litrud.dogsgallery.network.monitoring.Event
@@ -20,6 +21,7 @@ class PhotoListFragment : Fragment() {
     private val viewModel: PhotosViewModel by sharedGraphViewModel(R.id.photo_gallery)
     private lateinit var containingActivity: AppCompatActivity
     private lateinit var args: PhotoListFragmentArgs
+    private lateinit var mRecycler: RecyclerView
     private lateinit var mAdapter: PhotoListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,11 +56,10 @@ class PhotoListFragment : Fragment() {
         val squareSize = determineItemWidth(columnsNumber)
         toolbar.title = args.breedFull
         mAdapter = PhotoListAdapter(squareSize, args.breedFull)
-        with(photo_list) {
+        mRecycler = photo_list.apply {
             layoutManager = GridLayoutManager(this@PhotoListFragment.context, columnsNumber)
             adapter = mAdapter
         }
-
         // request sub-breeds list by breed
         viewModel.getListAllSubBreeds(args.breedKeyword)
         subscribeToData()
@@ -73,6 +74,10 @@ class PhotoListFragment : Fragment() {
                 containingActivity.onBackPressed()
         }
         return false
+    }
+
+    override fun onDestroyView() { super.onDestroyView()
+        mRecycler.adapter = null
     }
 
     // number of columns depends on screen orientation

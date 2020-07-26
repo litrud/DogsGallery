@@ -34,14 +34,19 @@ class PhotoListAdapter(
     override fun getItemCount(): Int
             = urlList.size
 
+    override fun onViewRecycled(holder: ViewHolder) { super.onViewRecycled(holder)
+        holder.cleanup()
+    }
+
     inner class ViewHolder(
         override val containerView: View
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
+        private val imageView = image_view.apply {
+            layoutParams.height = squareSize
+        }
+
         fun bindItem(position: Int) {
-            val imageView = image_view.apply {
-                layoutParams.height = squareSize
-            }
             picassoRequestCreator(urlList[position])
                 .into(imageView)
 
@@ -52,6 +57,11 @@ class PhotoListAdapter(
                 )
                 it.findNavController().navigate(action)
             }
+        }
+
+        fun cleanup() {
+            Picasso.get()
+                .cancelRequest(imageView)
         }
     }
 
